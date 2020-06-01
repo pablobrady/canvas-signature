@@ -5,17 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="assets/css/main.css">
+  <!-- <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet"> -->
 </head>
 <body>
 
 <div>
-  <h1 class="text-xl">Please initial below</h1>
+  <h1 class="text-xl font-bolder px-2">Please sign or initial below:</h1>
   <canvas id="CANVAS" class="border border-8">
     Sorry, this device is not supported.  Try updating your browser.
   </canvas>
-  <div class="w-full flex content-between">
-    <button clear="p-2 text-red-500 bg-green-500 hover:bg-green-900 rounded-lg">Clear</button>
-    <button clear="p-2 bg-green-500 hover:bg-green-900 rounded-lg">SUBMIT</button>
+  <div class="w-full flex justify-between pt-2 px-2">
+    <button id="CLEAR-BTN" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Clear</button>
+    <button id="SUBMIT-SIG-BTN" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">SUBMIT</button>
   </div>
 </div>
 
@@ -23,6 +24,8 @@
 <script>
   (function() {
     var el = document.getElementById('CANVAS'),  ctx = el.getContext('2d'), isDrawing;
+    var clearBtn = document.getElementById('CLEAR-BTN');
+    var submitSignatureBtn = document.getElementById('SUBMIT-SIG-BTN');
  
     if (ctx) {
       // resize the canvas to fill browser window dynamically
@@ -30,14 +33,13 @@
 
       function resizeCanvas() {
         el.width = window.innerWidth;
-        el.height = el.width / 2;
-
-        drawStuff(); 
+        el.height = (el.width/2) > window.innerHeight ? window.innerHeight : el.width/2
       }
       resizeCanvas();
       // ctx.clearRect()
 
       el.onmousedown = function(e) {
+        console.log( "mousedown e = ", e + " isDrawing = " + isDrawing)
         isDrawing = true;
         ctx.lineWidth = 10;
         ctx.lineJoin = ctx.lineCap = "round";
@@ -57,9 +59,6 @@
         isDrawing = false;
       }
 
-      function drawStuff() {
-        
-      }
     }
   })();
 </script>
