@@ -30,7 +30,7 @@
     var that = this;
     clearBtn.addEventListener('click', event => {
       console.log("CLICKED CLEAR");
-      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      ctx.clearRect(0, 0, el.width, el.height);
     })
 
     if (ctx) {
@@ -45,7 +45,9 @@
 
       el.onmousedown = function(e) {
         console.log( "mousedown e = ", e + " isDrawing = " + isDrawing)
+        
         isDrawing = true;
+        ctx.beginPath();        
         ctx.lineWidth = 5;
         ctx.lineJoin = ctx.lineCap = "round";
         ctx.shadowBlur = 5;
