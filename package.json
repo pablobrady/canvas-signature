@@ -1,0 +1,24 @@
+{
+  "name": "canvas-review",
+  "version": "1.0.0",
+  "description": "Signature canvas",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx tailwindcss build source/css/main.css -o public/assets/css/main.css; npm run serve;",
+    "serve": "npx http-server public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/Curiousitude/canvas-review.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/Curiousitude/canvas-review#readme",
+  "devDependencies": {
+    "http-server": "^0.12.3"
+  },
+  "dependencies": {
+    "tailwindcss": "^1.4.6"
+  }
+}

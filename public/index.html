@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<div>
+  <h1 class="text-xl">Please initial below</h1>
+  <canvas id="CANVAS" class="border border-8">
+    Sorry, this device is not supported.  Try updating your browser.
+  </canvas>
+  <div class="w-full flex content-between">
+    <button clear="p-2 text-red-500 bg-green-500 hover:bg-green-900 rounded-lg">Clear</button>
+    <button clear="p-2 bg-green-500 hover:bg-green-900 rounded-lg">SUBMIT</button>
+  </div>
+</div>
+
+
+<script>
+  (function() {
+    var el = document.getElementById('CANVAS'),  ctx = el.getContext('2d'), isDrawing;
+ 
+    if (ctx) {
+      // resize the canvas to fill browser window dynamically
+      window.addEventListener('resize', resizeCanvas, false);
+
+      function resizeCanvas() {
+        el.width = window.innerWidth;
+        el.height = el.width / 2;
+
+        drawStuff(); 
+      }
+      resizeCanvas();
+      // ctx.clearRect()
+
+      el.onmousedown = function(e) {
+        isDrawing = true;
+        ctx.lineWidth = 10;
+        ctx.lineJoin = ctx.lineCap = "round";
+        ctx.shadowBlur = 5;
+        ctx.shadowColor = 'rgb(0, 0, 0)';
+        ctx.moveTo(e.clientX, e.clientY);
+      }
+      el.onmousemove = function(e) {
+        if(isDrawing) {
+          ctx.lineTo(e.clientX, e.clientY);
+          ctx.stroke();
+        }
+      }
+      el.onmouseup = function(e) {
+        ctx.lineTo(e.clientX, e.clientY);
+        ctx.stroke();
+        isDrawing = false;
+      }
+
+      function drawStuff() {
+        
+      }
+    }
+  })();
+</script>
+</body>
+</html>
