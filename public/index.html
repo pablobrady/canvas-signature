@@ -26,7 +26,13 @@
     var el = document.getElementById('CANVAS'),  ctx = el.getContext('2d'), isDrawing;
     var clearBtn = document.getElementById('CLEAR-BTN');
     var submitSignatureBtn = document.getElementById('SUBMIT-SIG-BTN');
- 
+
+    var that = this;
+    clearBtn.addEventListener('click', event => {
+      console.log("CLICKED CLEAR");
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    })
+
     if (ctx) {
       // resize the canvas to fill browser window dynamically
       window.addEventListener('resize', resizeCanvas, false);
@@ -36,12 +42,11 @@
         el.height = (el.width/2) > window.innerHeight ? window.innerHeight : el.width/2
       }
       resizeCanvas();
-      // ctx.clearRect()
 
       el.onmousedown = function(e) {
         console.log( "mousedown e = ", e + " isDrawing = " + isDrawing)
         isDrawing = true;
-        ctx.lineWidth = 10;
+        ctx.lineWidth = 5;
         ctx.lineJoin = ctx.lineCap = "round";
         ctx.shadowBlur = 5;
         ctx.shadowColor = 'rgb(0, 0, 0)';
