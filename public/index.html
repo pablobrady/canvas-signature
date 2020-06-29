@@ -18,6 +18,7 @@
     <button id="CLEAR-BTN" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Clear</button>
     <button id="SUBMIT-SIG-BTN" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">SUBMIT</button>
   </div>
+  <div id="OUTPUT" class="border border-8"></div>
 </div>
 
 
@@ -26,47 +27,116 @@
     var el = document.getElementById('CANVAS'),  ctx = el.getContext('2d'), isDrawing;
     var clearBtn = document.getElementById('CLEAR-BTN');
     var submitSignatureBtn = document.getElementById('SUBMIT-SIG-BTN');
+    var output = document.getElementById('OUTPUT');
 
     var that = this;
     clearBtn.addEventListener('click', event => {
       console.log("CLICKED CLEAR");
       ctx.clearRect(0, 0, el.width, el.height);
     })
+    submitSignatureBtn.addEventListener('click', event => {
+      console.log("CLICKED SUBMIT");
+      ctx.clearRect(0, 0, el.width, el.height);
+    })
 
-    if (ctx) {
-      // resize the canvas to fill browser window dynamically
-      window.addEventListener('resize', resizeCanvas, false);
 
-      function resizeCanvas() {
-        el.width = window.innerWidth;
-        el.height = (el.width/2) > window.innerHeight ? window.innerHeight : el.width/2
+    var tv = document.querySelector("#CANVAS"),
+      el = document.getElementById('CANVAS'),  
+      ctx = el.getContext('2d'), 
+      isDrawing = false,
+      outStr = "";
+
+    ctx.font = "50px serif";
+    ctx.fillStyle = "#0000FF";
+
+    // resize the canvas to fill browser window dynamically
+    window.addEventListener('resize', resizeCanvas, false);
+
+    function resizeCanvas() {
+      el.width = window.innerWidth - 25;
+      el.height = el.width / 2;
+
+      drawStuff(); 
+    }
+    resizeCanvas();
+
+
+
+    var penDown = function(e) {
+      isDrawing = true;
+      ctx.beginPath();
+      ctx.lineWidth = 5;
+      ctx.lineJoin = ctx.lineCap = "round";
+      ctx.shadowBlur = 5;
+      ctx.shadowColor = 'rgb(0, 0, 0)';
+      ctx.moveTo(e.clientX, e.xclientY);
+      ctx.globalAlpha = 0.5;
+
+      console.log("down e = ", e.touches)
+      outStr = `down = ${e.clientX}, ${e.clientY}`;
+      ctx.fillStyle = "#333333";
+      ctx.fillText(outStr, e.clientX, e.clientY);
+    }
+
+    var penUp = function(e) {
+      ctx.lineTo(e.clientX, e.clientY);
+      ctx.strokeStyle = "red";
+      ctx.stroke();
+      ctx.globalAlpha = 0.0;
+
+      console.log("PEN-UP!");
+      isDrawing = false;
+    }
+
+    var penMove = function(e) {
+      if(isDrawing) {
+        ctx.strokeStyle = "#111111";
+        if( e.targetTouches ) {
+          ctx.lineTo(e.targetTouches[0].clientX, e.targetTouches[0].clientY); // ToucheMove
+        } else {
+          ctx.lineTo(e.clientX, e.clientY); // MouseMove
+        }
+        ctx.stroke();
       }
-      resizeCanvas();
+    }
 
-      el.onmousedown = function(e) {
-        console.log( "mousedown e = ", e + " isDrawing = " + isDrawing)
-        
-        isDrawing = true;
-        ctx.beginPath();        
-        ctx.lineWidth = 5;
-        ctx.lineJoin = ctx.lineCap = "round";
-        ctx.shadowBlur = 5;
-        ctx.shadowColor = 'rgb(0, 0, 0)';
-        ctx.moveTo(e.clientX, e.clientY);
+
+    ////
+
+    tv.addEventListener('touchstart', function(e) {
+      tv.addEventListener('touchend', function(e) {
+        penUp(e);
+      });
+
+      tv.addEventListener('touchcancel', function(e) {
+        penUp(e);
+      });
+
+      tv.addEventListener('touchmove', function(e) {
+        penMove(e);
+      });
+      penDown(e);
+    });
+
+
+
+    el.onmousedown = function(e) {
+      el.onmouseup = function(e) {
+        penUp(e);
       }
       el.onmousemove = function(e) {
-        if(isDrawing) {
-          ctx.lineTo(e.clientX, e.clientY);
-          ctx.stroke();
-        }
+        // console.log(`mousemove x,y ==> ${e.clientX}, ${e.clientY}`)
+        penMove(e);
       }
-      el.onmouseup = function(e) {
-        ctx.lineTo(e.clientX, e.clientY);
-        ctx.stroke();
-        isDrawing = false;
-      }
-
+      penDown(e);
     }
+    
+
+    function drawStuff() {
+      
+    }
+
+
   })();
 </script>
 </body>
